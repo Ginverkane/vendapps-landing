@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VendApps</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --caribbean: #00A3A3;
+      --jet: #2F2F2F;
+      --white: #FFFFFF;
+      --coral: #FF6F61;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--jet);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .bg { position: fixed; inset: 0; z-index: 0; }
+
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.12;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .bg-circle:nth-child(1) {
+      width: 500px; height: 500px;
+      background: var(--caribbean);
+      top: -150px; left: -100px;
+    }
+
+    .bg-circle:nth-child(2) {
+      width: 350px; height: 350px;
+      background: var(--coral);
+      bottom: -100px; right: -50px;
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 24px;
+      animation: fadeIn 0.8s ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand {
+      font-family: 'Syne', sans-serif;
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+    }
+
+    .brand .vend { color: var(--white); }
+    .brand .apps { color: var(--caribbean); }
+
+    .tagline {
+      font-size: 18px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 40px;
+      letter-spacing: 0.5px;
+    }
+
+    .pill {
+      display: inline-block;
+      background: rgba(0, 163, 163, 0.15);
+      border: 1px solid rgba(0, 163, 163, 0.3);
+      color: var(--caribbean);
+      font-size: 14px;
+      padding: 8px 20px;
+      border-radius: 100px;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 24px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="bg">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+  </div>
+
+  <div class="content">
+    <div class="brand">
+      <span class="vend">Vend</span><span class="apps">Apps</span>
+    </div>
+    <p class="tagline">Connect vendors with event organizers</p>
+    <span class="pill">Mobile App — Coming Soon</span>
+  </div>
+
+  <div class="footer">© 2026 VendApps · UsahaOne Ventures</div>
+</body>
+</html>

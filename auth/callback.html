@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VendApps — Verifying</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --caribbean: #00A3A3;
+      --jet: #2F2F2F;
+      --white: #FFFFFF;
+      --coral: #FF6F61;
+      --success: #2BB673;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--jet);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .bg-circle:nth-child(1) {
+      width: 500px; height: 500px;
+      background: var(--caribbean);
+      top: -100px; left: -100px;
+    }
+
+    .bg-circle:nth-child(2) {
+      width: 400px; height: 400px;
+      background: var(--coral);
+      bottom: -100px; right: -50px;
+      animation-delay: 3s;
+    }
+
+    .bg-circle:nth-child(3) {
+      width: 300px; height: 300px;
+      background: var(--caribbean);
+      bottom: 100px; left: 200px;
+      animation-delay: 5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand {
+      font-family: 'Syne', sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 32px;
+    }
+
+    .brand .vend { color: var(--white); }
+    .brand .apps { color: var(--caribbean); }
+
+    .icon-wrap {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 32px;
+    }
+
+    .icon-wrap.loading {
+      background: rgba(0, 163, 163, 0.15);
+      border: 2px solid rgba(0, 163, 163, 0.3);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .icon-wrap.success {
+      background: rgba(43, 182, 115, 0.15);
+      border: 2px solid rgba(43, 182, 115, 0.4);
+    }
+
+    .icon-wrap.error {
+      background: rgba(255, 111, 97, 0.15);
+      border: 2px solid rgba(255, 111, 97, 0.4);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(0, 163, 163, 0.2);
+      border-top-color: var(--caribbean);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .status-message {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--caribbean);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--caribbean);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 14px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s ease;
+    }
+
+    .btn.visible { opacity: 1; transform: translateY(0); }
+    .btn:hover { background: #008c8c; }
+
+    .btn.error-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .btn.error-btn:hover { background: rgba(255, 255, 255, 0.1); }
+
+    .footer {
+      position: fixed;
+      bottom: 24px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.25);
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+  </div>
+
+  <div class="card">
+    <div class="brand">
+      <span class="vend">Vend</span><span class="apps">Apps</span>
+    </div>
+
+    <div class="icon-wrap loading" id="iconWrap">
+      <div class="spinner" id="spinner"></div>
+    </div>
+
+    <h2 class="status-title" id="statusTitle">Verifying your email</h2>
+    <p class="status-message" id="statusMessage">
+      Please wait while we confirm your account...
+    </p>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <a href="#" class="btn" id="actionBtn">Open VendApps</a>
+  </div>
+
+  <div class="footer">© 2026 VendApps · UsahaOne Ventures</div>
+
+  <script>
+    const iconWrap = document.getElementById('iconWrap');
+    const spinner = document.getElementById('spinner');
+    const statusTitle = document.getElementById('statusTitle');
+    const statusMessage = document.getElementById('statusMessage');
+    const progressFill = document.getElementById('progressFill');
+    const actionBtn = document.getElementById('actionBtn');
+
+    function setSuccess() {
+      iconWrap.className = 'icon-wrap success';
+      spinner.style.display = 'none';
+      iconWrap.innerHTML = '✓';
+      statusTitle.textContent = 'Email Verified!';
+      statusMessage.textContent = 'Your account has been confirmed. Tap the button below to open VendApps and log in.';
+      progressFill.style.width = '100%';
+      progressFill.style.background = '#2BB673';
+      actionBtn.textContent = 'Open VendApps';
+      actionBtn.href = 'vendappsmobile://auth/callback';
+      actionBtn.classList.add('visible');
+    }
+
+    function setError(msg) {
+      iconWrap.className = 'icon-wrap error';
+      spinner.style.display = 'none';
+      iconWrap.innerHTML = '✕';
+      statusTitle.textContent = 'Verification Failed';
+      statusMessage.textContent = msg || 'Something went wrong. Please try signing up again.';
+      progressFill.style.width = '100%';
+      progressFill.style.background = '#FF6F61';
+      actionBtn.textContent = 'Try Again';
+      actionBtn.href = 'vendappsmobile://role';
+      actionBtn.classList.add('visible', 'error-btn');
+    }
+
+    // Animate progress
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+      progress += Math.random() * 15;
+      if (progress > 85) progress = 85;
+      progressFill.style.width = progress + '%';
+    }, 300);
+
+    // Parse URL
+    const params = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+    const errorCode = params.get('error') || hashParams.get('error');
+    const errorDesc = params.get('error_description') || hashParams.get('error_description');
+    const type = params.get('type') || hashParams.get('type');
+    const accessToken = hashParams.get('access_token');
+    const code = params.get('code');
+
+    setTimeout(() => {
+      clearInterval(progressInterval);
+
+      if (errorCode) {
+        setError(errorDesc?.replace(/\+/g, ' '));
+        return;
+      }
+
+      setSuccess();
+      setTimeout(() => {
+        window.location.href = 'vendappsmobile://auth/callback'
+          + window.location.search
+          + window.location.hash;
+      }, 3000);
+    }, 1500);
+  </script>
+</body>
+</html>
